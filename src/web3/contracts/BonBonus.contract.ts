@@ -31,4 +31,25 @@ export class BonBonusContractManager {
       return null;
     }
   };
+
+  getTokenParticipatingProviders = async (token: number): Promise<number[]> => {
+    try {
+      return await this.contract.getTokenParticipatingProviders(token);
+    } catch (e) {
+      return null;
+    }
+  };
+
+  getProviderInfo = async (
+    provider: number,
+  ): Promise<{
+    exists: boolean;
+    providerType: any;
+  }> => {
+    try {
+      return await this.contract.providers(provider);
+    } catch (e) {
+      return null;
+    }
+  };
 }
