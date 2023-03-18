@@ -12,13 +12,15 @@ export class ChainlinkJobsService {
     private readonly configService: ConfigService,
     private readonly bonBonusManager: BonBonusContractManager,
   ) {}
-  async calculateGlobalRating(data: CalculateGlobalRatingDto): Promise<number> {
-    return 4.5;
+  async calculateGlobalRating(data: CalculateGlobalRatingDto): Promise<{ rating: number } | BadRequestException> {
+    return {
+      rating: 4,
+    };
   }
 
   async calculateProviderRating(
     data: CalculateProviderRatingDto,
-  ): Promise<number | BadRequestException> {
+  ): Promise<{ rating: number } | BadRequestException> {
     const allPoints = await this.bonBonusManager.getTokenProviderRatings(
       data.data.token,
       data.data.provider,
@@ -35,6 +37,9 @@ export class ChainlinkJobsService {
     }
 
     finalPoint = Number((finalPoint / allPoints.length).toFixed(2)) * 100;
-    return finalPoint;
+
+    return {
+      rating: finalPoint,
+    };
   }
 }

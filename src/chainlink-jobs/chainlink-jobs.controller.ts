@@ -30,7 +30,7 @@ export class ChainlinkJobsController {
   calculateGlobalRating(
     @Req() request: Request,
     @Body() data: CalculateGlobalRatingDto,
-  ): Promise<number | BadRequestException> {
+  ): Promise<{ rating: number } | BadRequestException> {
     return this.chainlinkJobsService.calculateGlobalRating(data);
   }
 
@@ -43,7 +43,7 @@ export class ChainlinkJobsController {
   calculateProviderRating(
     @Req() request: Request,
     @Body() data: CalculateProviderRatingDto,
-  ): Promise<number | BadRequestException> {
+  ): Promise<{ rating: number } | BadRequestException> {
     return this.chainlinkJobsService.calculateProviderRating(data);
   }
 }
