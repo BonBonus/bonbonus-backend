@@ -46,48 +46,37 @@ export class ChainlinkJobsService {
       throw new BadRequestException();
     }
 
-    const providers_weights = {};
+    const providersWeights = {};
+    const usingProviders = [];
+    let providerWeightSum = 0;
+    const providersSum = {};
 
-    const using_providers = [];
-    let provider_weight_sum = 0;
-    const providers_sum = {};
-
-    for (let i = 0; i < providers.length; i++) {
-      const providerType = await this.bonBonusManager.getProviderInfo(
-        providers[i],
-      );
+    for (const provider of providers) {
+      const providerType = await this.bonBonusManager.getProviderInfo(provider);
       const providerRatings =
         await this.bonBonusManager.getTokenProviderRatings(
           data.data.token,
-          providers[i],
+          provider,
         );
 
-      using_providers.push(Number(providerType.providerType));
-
-      provider_weight_sum += providerData[providers[i]];
-
-      providers_sum[i] = 0;
-
-      for (let j = 0; j < providerRatings.length; j++) {
-        providers_sum[i] += Number(providerRatings[j]);
-      }
-
-      providers_sum[i] = providers_sum[i] / providerRatings.length;
+      usingProviders.push(Number(providerType.providerType));
+      providerWeightSum += providerData[provider];
+      providersSum[provider] =
+        providerRatings.reduce((acc, cur) => acc + Number(cur), 0) /
+        providerRatings.length;
     }
 
-    for (let i = 0; i < providers.length; i++) {
-      providers_weights[providers[i]] =
-        providerData[providers[i]] / provider_weight_sum;
+    for (const provider of providers) {
+      providersWeights[provider] = providerData[provider] / providerWeightSum;
     }
 
-    let result = 0;
-
-    for (const provider in providers_sum) {
-      result += providers_sum[provider] * providers_weights[provider];
-    }
+    const result = Object.keys(providersSum).reduce(
+      (acc, cur) => acc + providersSum[cur] * providersWeights[cur],
+      0,
+    );
 
     return {
-      rating: Math.round(Number(result.toFixed(2)) * 100),
+      rating: Math.round(result * 100),
     };
   }
 
@@ -103,14 +92,10 @@ export class ChainlinkJobsService {
       throw new BadRequestException();
     }
 
-    let finalPoint = 0;
-
-    for (let i = 0; i < allPoints.length; i++) {
-      finalPoint += Number(allPoints[i]);
-    }
-
-    finalPoint = Math.round(
-      Number((finalPoint / allPoints.length).toFixed(2)) * 100,
+    const finalPoint = Math.round(
+      (allPoints.reduce((acc, cur) => acc + Number(cur), 0) /
+        allPoints.length) *
+        100,
     );
 
     return {
