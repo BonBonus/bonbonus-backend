@@ -22,21 +22,21 @@ async function bootstrap() {
   const version = '0.0.1';
 
   app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: false,
-      }),
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: false,
+    }),
   );
   app.use(helmet());
   app.use(cookieParser());
 
   if (['local-dev', 'development'].includes(environment)) {
     const options = new DocumentBuilder()
-        .setTitle('BonBonus – backend service')
-        .setDescription('Description of API methods.')
-        .addBearerAuth()
-        .setVersion(version)
-        .build();
+      .setTitle('BonBonus – backend service')
+      .setDescription('Description of API methods.')
+      .addBearerAuth()
+      .setVersion(version)
+      .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('swagger', app, document);
     Logger.log('Swagger has been launched', 'Swagger');
