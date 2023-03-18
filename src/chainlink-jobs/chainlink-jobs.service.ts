@@ -5,7 +5,6 @@ import { CalculateGlobalRatingDto } from './dto/calculateGlobalRating.dto';
 import { CalculateProviderRatingDto } from './dto/calculateProviderRating.dto';
 
 import { BonBonusContractManager } from '../web3/contracts/BonBonus.contract';
-import * as ethers from 'ethers';
 
 const providerData = {
   '0': 0.063, // sports and fitness
@@ -62,6 +61,7 @@ export class ChainlinkJobsService {
           data.data.token,
           providers[i],
         );
+
       using_providers.push(Number(providerType.providerType));
 
       provider_weight_sum += providerData[providers[i]];
@@ -83,11 +83,11 @@ export class ChainlinkJobsService {
     let result = 0;
 
     for (const provider in providers_sum) {
-      result += using_providers[provider] * providers_weights[provider];
+      result += providers_sum[provider] * providers_weights[provider];
     }
 
     return {
-      rating: Number(result.toFixed(2)) * 100,
+      rating: Math.round(Number(result.toFixed(2)) * 100),
     };
   }
 
@@ -109,7 +109,9 @@ export class ChainlinkJobsService {
       finalPoint += Number(allPoints[i]);
     }
 
-    finalPoint = Number((finalPoint / allPoints.length).toFixed(2)) * 100;
+    finalPoint = Math.round(
+      Number((finalPoint / allPoints.length).toFixed(2)) * 100,
+    );
 
     return {
       rating: finalPoint,
