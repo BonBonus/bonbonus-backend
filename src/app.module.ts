@@ -7,6 +7,7 @@ import * as Joi from 'joi';
 import { AppController } from './app.controller';
 
 import { AppService } from './app.service';
+import { ChainlinkJobsModule } from './chainlink-jobs/chainlink-jobs.module';
 
 @Module({
   imports: [
@@ -18,8 +19,14 @@ import { AppService } from './app.service';
       validationSchema: Joi.object({
         ENVIRONMENT: Joi.string().required(),
         PORT: Joi.number().required(),
+        CHAINLINK_ORACLE_API_KEY: Joi.string().required(),
+        MORALIS_API_KEY: Joi.string().required(),
+        BONBONUS_CONTRACT_ADDRESS: Joi.string().required(),
+        RPC_URL: Joi.string().required(),
       }),
-    }),],
+    }),
+    ChainlinkJobsModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
