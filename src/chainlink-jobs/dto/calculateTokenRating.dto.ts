@@ -11,7 +11,7 @@ class DataObject {
   token: number;
 }
 
-export class CalculateProviderRatingDto {
+export class CalculateTokenRatingDto {
   @IsNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => DataObject)

@@ -12,8 +12,7 @@ import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 import { ChainlinkOracleGuard } from '../common/guards/chainlinkOracle.guard';
 
-import { CalculateGlobalRatingDto } from './dto/calculateGlobalRating.dto';
-import { CalculateProviderRatingDto } from './dto/calculateProviderRating.dto';
+import { CalculateTokenRatingDto } from './dto/calculateTokenRating.dto';
 
 import { ChainlinkJobsService } from './chainlink-jobs.service';
 
@@ -21,29 +20,18 @@ import { ChainlinkJobsService } from './chainlink-jobs.service';
 export class ChainlinkJobsController {
   constructor(private readonly chainlinkJobsService: ChainlinkJobsService) {}
 
-  @Post('calculate-global-rating')
+  @Post('calculate-token-rating')
   @HttpCode(200)
   @UseGuards(ChainlinkOracleGuard)
   @Throttle(15, 30)
   @ApiSecurity('oracle-api-key')
   @ApiTags('Chainlink jobs')
-  calculateGlobalRating(
+  calculateTokenRating(
     @Req() request: Request,
-    @Body() data: CalculateGlobalRatingDto,
-  ): Promise<{ rating: number } | BadRequestException> {
-    return this.chainlinkJobsService.calculateGlobalRating(data);
-  }
-
-  @Post('calculate-provider-rating')
-  @HttpCode(200)
-  @UseGuards(ChainlinkOracleGuard)
-  @Throttle(15, 30)
-  @ApiSecurity('oracle-api-key')
-  @ApiTags('Chainlink jobs')
-  calculateProviderRating(
-    @Req() request: Request,
-    @Body() data: CalculateProviderRatingDto,
-  ): Promise<{ rating: number } | BadRequestException> {
-    return this.chainlinkJobsService.calculateProviderRating(data);
+    @Body() data: CalculateTokenRatingDto,
+  ): Promise<
+    { global_rating: number; provider_rating: number } | BadRequestException
+  > {
+    return this.chainlinkJobsService.calculateTokenRating(data);
   }
 }

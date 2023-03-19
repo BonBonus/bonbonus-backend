@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { CalculateGlobalRatingDto } from './dto/calculateGlobalRating.dto';
-import { CalculateProviderRatingDto } from './dto/calculateProviderRating.dto';
+import { CalculateTokenRatingDto } from './dto/calculateTokenRating.dto';
 
 import { BonBonusContractManager } from '../web3/contracts/BonBonus.contract';
 
@@ -35,9 +34,27 @@ export class ChainlinkJobsService {
     private readonly configService: ConfigService,
     private readonly bonBonusManager: BonBonusContractManager,
   ) {}
-  async calculateGlobalRating(
-    data: CalculateGlobalRatingDto,
-  ): Promise<{ rating: number } | BadRequestException> {
+
+  async calculateTokenRating(
+    data: CalculateTokenRatingDto,
+  ): Promise<
+    { global_rating: number; provider_rating: number } | BadRequestException
+  > {
+    const allPoints = await this.bonBonusManager.getTokenProviderRatings(
+      data.data.token,
+      data.data.provider,
+    );
+
+    if (!allPoints) {
+      throw new BadRequestException();
+    }
+
+    const finalPoint = Math.round(
+      (allPoints.reduce((acc, cur) => acc + Number(cur), 0) /
+        allPoints.length) *
+        100,
+    );
+
     const providers = await this.bonBonusManager.getTokenParticipatingProviders(
       data.data.token,
     );
@@ -76,30 +93,8 @@ export class ChainlinkJobsService {
     );
 
     return {
-      rating: Math.round(result * 100),
-    };
-  }
-
-  async calculateProviderRating(
-    data: CalculateProviderRatingDto,
-  ): Promise<{ rating: number } | BadRequestException> {
-    const allPoints = await this.bonBonusManager.getTokenProviderRatings(
-      data.data.token,
-      data.data.provider,
-    );
-
-    if (!allPoints) {
-      throw new BadRequestException();
-    }
-
-    const finalPoint = Math.round(
-      (allPoints.reduce((acc, cur) => acc + Number(cur), 0) /
-        allPoints.length) *
-        100,
-    );
-
-    return {
-      rating: finalPoint,
+      global_rating: finalPoint,
+      provider_rating: Math.round(result * 100),
     };
   }
 }
