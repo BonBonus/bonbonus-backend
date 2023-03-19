@@ -93,8 +93,8 @@ export class ChainlinkJobsService {
     );
 
     return {
-      global_rating: finalPoint,
-      provider_rating: Math.round(result * 100),
+      global_rating: Math.round(result * 100),
+      provider_rating: finalPoint,
     };
   }
 }
