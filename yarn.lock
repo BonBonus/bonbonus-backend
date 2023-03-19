@@ -360,10 +360,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bonbonus/bonbonus-protocol@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@bonbonus/bonbonus-protocol/-/bonbonus-protocol-0.0.11.tgz#84b271722d376e6fd8bba881ccc16414efd4afa7"
-  integrity sha512-fdlT0g6ca+fBzdu8oCJO7yoxH6/DlXxSqkWdKiBDH44f4CDPs2l1lOcnmDtgkA+i+1fgZxX3v7xNPqvqDE2Oig==
+"@bonbonus/bonbonus-protocol@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@bonbonus/bonbonus-protocol/-/bonbonus-protocol-0.0.12.tgz#2c11103df6c9f04c2e3cef57f149e33188a59adf"
+  integrity sha512-iP3Vc9bLw9a1cixaXSRG2M6rnV0Yn7W7NdTPE1+hgbPI7EPed9Bd80Ho5r/EUTx+MJRW5Y263uUrAoIKelxcSw==
   dependencies:
     "@chainlink/contracts" "^0.6.1"
     "@openzeppelin/contracts" "^4.8.2"
